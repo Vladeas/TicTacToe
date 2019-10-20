@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        if ( checkForLineWin(field) && checkForColumnWin(field) && checkForPrimaryDiagonalWin(field) && checkForSecondaryDiagonalWin(field)){
+        if ( checkForLineWin(field) || checkForColumnWin(field) || checkForPrimaryDiagonalWin(field) || checkForSecondaryDiagonalWin(field)){
             return true;
         }
         return false;
