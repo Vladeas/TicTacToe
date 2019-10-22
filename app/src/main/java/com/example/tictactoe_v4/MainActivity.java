@@ -3,12 +3,12 @@ package com.example.tictactoe_v4;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +21,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textViewPlayerTwo;
     private ImageButton[][] imageButtons =new ImageButton[boardLength][boardLength];
 
+    /*
+        - initialize the Used Views (by Id)
+        - set on clickListener for each ImageButton(From which the board is composed)
+        - set on clickListener for the two[2] reset Buttons(From which the board is composed)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         textViewPlayerOne = findViewById(R.id.textViewPlayerOne);
         textViewPlayerTwo = findViewById(R.id.textViewPlayerTwo);
@@ -55,6 +61,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+
+    /*
+        - change the tag and background of the given View v (detected by the onClickListener) with
+        the according players turn
+        - count the number of rounds
+        - call the check for win method
+     */
     public void onClick(View v) {
         if(!((ImageButton) v).getTag().toString().equals("")){
             return;
@@ -82,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /*
+        - transfer the image View matrix data to a new String matrix
+        - return true if at least one victory condition is met
+     */
     public boolean checkForWin(){
         String[][] field = new String[boardLength][boardLength];
 
@@ -98,7 +115,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /*
-    check for
+        Victory conditions on every line for a 3 by 3 matrix
+            - given the matrix as a string
+            - return true if the three[3] values of the line are the same
+            - checks if the string is different from the initial one("")
      */
     private boolean checkForLineWin(String[][] field){
         for (int i = 0; i < boardLength;i++){
@@ -109,6 +129,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    /*
+        Victory conditions on every column for a 3 by 3 matrix
+            - given the matrix as a string
+            - return true if the three[3] values of the column are the same
+            - checks if the string is different from the initial one("")
+     */
     private boolean checkForColumnWin(String[][] field){
         for (int i = 0; i < 3;i++){
             if(field[0][i].equals(field[1][i]) && field[0][i].equals(field[2][i]) && !field[0][i].equals("")){
@@ -118,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    /*
+        Victory conditions on the primary diagonal for a 3 by 3 matrix
+            - given the matrix as a string
+            - return true if the three[3] values are the same
+            - checks if the string is different from the initial one("")
+     */
     private boolean checkForPrimaryDiagonalWin(String[][] field) {
         if(field[0][0].equals(field[1][1]) && field[0][0].equals(field[2][2]) && !field[0][0].equals("")){
             return true;
@@ -125,6 +157,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    /*
+        Victory conditions on the secondary diagonal for a 3 by 3 matrix
+            - given the matrix as a string
+            - return true if the three[3] values are the same
+            - checks if the string is different from the initial one("")
+     */
     private boolean checkForSecondaryDiagonalWin(String[][] field) {
         if(field[0][2].equals(field[1][1]) && field[0][2].equals(field[2][0]) && !field[0][2].equals("")){
             return true;
@@ -132,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    // Toast for when the match is won by player two[1]
     private void playerOneWins(){
         playerOnePoints++;
         Toast.makeText(this,"Player 1 wins!",Toast.LENGTH_SHORT).show();
@@ -139,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resetBoardGameEnd();
     }
 
+    // Toast for when the match is won by player two[2]
     private void playerTwoWins(){
         playerTwoPoints++;
         Toast.makeText(this,"Player 2 wins!",Toast.LENGTH_SHORT).show();
@@ -146,16 +186,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resetBoardGameEnd();
     }
 
+    // Toast for when the match is a draw
     private void draw(){
         Toast.makeText(this,"Draw!",Toast.LENGTH_SHORT).show();
         resetBoardGameEnd();
     }
 
+    /*
+        Update the text views with the current score for each player
+     */
     private void updatePointsText(){
         textViewPlayerOne.setText("Player 1\n" + playerOnePoints);
         textViewPlayerTwo.setText("Player 2\n" + playerTwoPoints);
     }
 
+    /*
+    Reset the game board, return tags and colour to initial values
+        - the round counter and player turn are also reset
+     */
     private void resetBoardGameEnd(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
@@ -167,6 +215,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playerOneTurn = true;
     }
 
+    /*
+    Reset the entire app, by returning all variables at the initial value
+     */
     private void resetGameButtonPress(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
@@ -181,6 +232,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         updatePointsText();
     }
 
+    /*
+    save the values of the given instance[Ex. in case of screen rotating the values are not lost]
+        - works with onRestoreInstanceState
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -190,6 +245,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         outState.putBoolean("playerOneTurn",playerOneTurn);
     }
 
+    /*
+    transfer the saved values in the new instance[Ex. in case of screen rotating the values are not lost]
+        - works with onSaveInstanceState
+     */
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
