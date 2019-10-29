@@ -71,7 +71,8 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:layout_margin="5dp"
-            android:freezesText="true"/>
+            android:freezesText="true"
+            android:adjustViewBounds="true"/>
 
         <ImageButton
             android:id="@+id/imageButton01"
