@@ -1,0 +1,170 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BoardGameActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBlack">
+
+        <TextView
+            android:id="@+id/textViewPlayerOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player 1\n0"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:textSize="30sp"
+            android:textColor="@color/colorRed"
+            android:textAlignment="center"
+            android:freezesText="true"/>
+
+        <Button
+            android:id="@+id/buttonResetGame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textViewPlayerOne"
+            android:layout_toLeftOf="@+id/textViewPlayerTwo"
+            android:layout_margin="5dp"
+            android:text="Reset Game"/>
+
+        <Button
+            android:id="@+id/buttonResetBoard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttonResetGame"
+            android:layout_toRightOf="@+id/textViewPlayerOne"
+            android:layout_toLeftOf="@+id/textViewPlayerTwo"
+            android:layout_margin="5dp"
+            android:text="Reset Board" />
+
+        <TextView
+            android:id="@+id/textViewPlayerTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Player 2\n0"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:textSize="30sp"
+            android:textColor="@color/colorBlue"
+            android:textAlignment="center"
+            android:freezesText="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorBlack">
+
+        <ImageButton
+            android:id="@+id/imageButton00"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+
+        <ImageButton
+            android:id="@+id/imageButton01"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+
+        <ImageButton
+            android:id="@+id/imageButton02"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorBlack">
+
+        <ImageButton
+            android:id="@+id/imageButton10"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+
+        <ImageButton
+            android:id="@+id/imageButton11"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+
+        <ImageButton
+            android:id="@+id/imageButton12"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorBlack">
+
+        <ImageButton
+            android:id="@+id/imageButton20"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+
+        <ImageButton
+            android:id="@+id/imageButton21"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true"/>
+
+        <ImageButton
+            android:id="@+id/imageButton22"
+            android:tag=""
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_margin="5dp"
+            android:freezesText="true" />
+    </LinearLayout>
+</LinearLayout>
