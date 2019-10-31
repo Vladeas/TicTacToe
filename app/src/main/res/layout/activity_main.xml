@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/buttonJustPlay"
         android:tag="0"
-        android:text="JustPlay"
+        android:text="Just Play"
         android:textSize="30sp"
         android:layout_below="@id/buttonPlayBest5"
         android:layout_centerHorizontal="true"
@@ -65,8 +65,8 @@
 
     <ImageButton
         android:id="@+id/imageButtonSettings"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:scaleType="centerInside"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"

@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         configurePlayButton();
+        configureSettingsButton();
     }
 
 
@@ -80,6 +82,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,BoardGameActivity.class);
                 i.putExtra("Extra_Game_Type",buttonJustPlay.getTag().toString());
+                startActivity(i);
+            }
+        });
+    }
+
+    private void configureSettingsButton(){
+        final ImageButton imageButtonSettings = (ImageButton) findViewById(R.id.imageButtonSettings);
+
+        imageButtonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,SettingsActivity.class);
                 startActivity(i);
             }
         });

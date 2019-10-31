@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -113,12 +114,19 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
             if(gameLength != 0) {
                 if (roundCountPlayerOne >= Math.ceil(gameLength / 2.0)) {
                     linearLayoutEndGamePopUp.setVisibility(View.VISIBLE);
+                    playerOneEndGameWin(1);
                 } else if (roundCountPlayerTwo >= Math.ceil(gameLength / 2.0)) {
                     linearLayoutEndGamePopUp.setVisibility(View.VISIBLE);
+                    playerOneEndGameWin(2);
                 }
             }
         }
 
+    }
+
+    private void playerOneEndGameWin(int player){
+        TextView textViewEndGame = (TextView) findViewById(R.id.textViewEndGame);
+        textViewEndGame.setText("Player " + player + " won!");
     }
 
     /*
