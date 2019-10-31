@@ -10,9 +10,9 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     /*
-        - initialize the Used Views (by Id)
-        - set on clickListener for each ImageButton(From which the board is composed)
-        - set on clickListener for the two[2] reset Buttons(From which the board is composed)
+        - hide action bar
+        - set screen orientation to Portrait
+        - call the necessary functions
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,49 +25,73 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void configurePlayButton(){
+    /*
+        - use setOnClickListener for the play button
+        - if pressed call the appropriate functions
+     */
+    public void configurePlayButton(){
         Button buttonPlayGame = (Button) findViewById(R.id.buttonPlayGame);
         buttonPlayGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 configureTwoOutThreeButton();
                 configureThreeOutFiveButton();
+                configureJustPlayButton();
             }
         });
     }
 
     private void configureTwoOutThreeButton(){
-        Button buttonPlay2Out3 = (Button) findViewById(R.id.buttonPlay2Out3);
-        if(buttonPlay2Out3.getVisibility() == View.VISIBLE) {
-            buttonPlay2Out3.setVisibility(View.INVISIBLE);
-        }else{
-            buttonPlay2Out3.setVisibility(View.VISIBLE);
-        }
-        buttonPlay2Out3.setOnClickListener(new View.OnClickListener() {
+        final Button buttonPlayBest3 = (Button) findViewById(R.id.buttonPlayBest3);
+        buttonVisibility(buttonPlayBest3);
+
+        buttonPlayBest3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,BoardGameActivity.class);
+                i.putExtra("Extra_Game_Type",buttonPlayBest3.getTag().toString());
                 startActivity(i);
             }
         });
     }
 
     private void configureThreeOutFiveButton(){
-        Button buttonPlay3Out5 = (Button) findViewById(R.id.buttonPlay3Out5);
-        if(buttonPlay3Out5.getVisibility() == View.VISIBLE) {
-            buttonPlay3Out5.setVisibility(View.INVISIBLE);
-        }else{
-            buttonPlay3Out5.setVisibility(View.VISIBLE);
-        }
-        buttonPlay3Out5.setOnClickListener(new View.OnClickListener() {
+        final Button buttonPlayBest5 = (Button) findViewById(R.id.buttonPlayBest5);
+        buttonVisibility(buttonPlayBest5);
+
+
+        buttonPlayBest5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,BoardGameActivity.class);
+                i.putExtra("Extra_Game_Type",buttonPlayBest5.getTag().toString());
                 startActivity(i);
             }
         });
     }
 
+    private void configureJustPlayButton(){
+        final Button buttonJustPlay = (Button) findViewById(R.id.buttonJustPlay);
+        buttonVisibility(buttonJustPlay);
+
+
+        buttonJustPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,BoardGameActivity.class);
+                i.putExtra("Extra_Game_Type",buttonJustPlay.getTag().toString());
+                startActivity(i);
+            }
+        });
+    }
+
+    private void buttonVisibility(View v){
+        if(v.getVisibility() == View.VISIBLE) {
+            v.setVisibility(View.INVISIBLE);
+        }else{
+            v.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public void onClick(View v) {

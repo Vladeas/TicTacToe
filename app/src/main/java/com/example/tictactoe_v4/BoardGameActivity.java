@@ -6,16 +6,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class BoardGameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int boardLength = 3;
-    private int roundCount, playerOnePoints, playerTwoPoints;
+    private int moveCount, roundCountPlayerOne, roundCountPlayerTwo,playerOnePoints, playerTwoPoints;
     private boolean playerOneTurn = true;
     private TextView textViewPlayerOne;
     private TextView textViewPlayerTwo;
@@ -32,6 +35,8 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         getSupportActionBar().hide();
         setContentView(R.layout.activity_board_game);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
 
         textViewPlayerOne = findViewById(R.id.textViewPlayerOne);
         textViewPlayerTwo = findViewById(R.id.textViewPlayerTwo);
@@ -74,14 +79,14 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
             return;
         }
         if(playerOneTurn){
-            ((ImageButton) v).setBackgroundResource(R.drawable.red_x);
+            ((ImageButton) v).setBackgroundResource(R.drawable.roman_helmet_512px_white);
             ((ImageButton) v).setTag("x");
         } else{
-            ((ImageButton) v).setBackgroundResource(R.drawable.blue_o);
+            ((ImageButton) v).setBackgroundResource(R.drawable.viking_helmet_512px_white);
             ((ImageButton) v).setTag("o");
         }
 
-        roundCount++;
+        moveCount++;
 
         if(checkForWin()){
             if(playerOneTurn){
@@ -89,11 +94,48 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
             } else {
                 playerTwoWins();
             }
-        }else if (roundCount == 9){
+        }else if (moveCount == 9){
             draw();
         }else{
             playerOneTurn = !playerOneTurn;
         }
+        gameEnd();
+    }
+
+
+    private void gameEnd(){
+        Double gameLength;
+        Bundle extras = getIntent().getExtras();
+        RelativeLayout linearLayoutEndGamePopUp = (RelativeLayout)findViewById(R.id.linearLayoutEndGamePopUp);
+        if (extras != null) {
+            gameLength = Double.parseDouble(extras.getString("Extra_Game_Type"));
+            //The key argument here must match that used in the other activity
+            if(gameLength != 0) {
+                if (roundCountPlayerOne >= Math.ceil(gameLength / 2.0)) {
+                    linearLayoutEndGamePopUp.setVisibility(View.VISIBLE);
+                } else if (roundCountPlayerTwo >= Math.ceil(gameLength / 2.0)) {
+                    linearLayoutEndGamePopUp.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+    }
+
+    /*
+        - call the reset game function
+        - It also makes the end game layout invisible
+     */
+    public void playAgainMatch(View view){
+        resetGameButtonPress();
+        RelativeLayout linearLayoutEndGamePopUp = (RelativeLayout)findViewById(R.id.linearLayoutEndGamePopUp);
+        linearLayoutEndGamePopUp.setVisibility(View.INVISIBLE);
+    }
+
+    /*
+        - end the instance of this activity
+     */
+    public void goToMainMenu(View view){
+        finish();
     }
 
     /*
@@ -177,6 +219,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(this,"Player 1 wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
         resetBoardGameEnd();
+        roundCountPlayerOne++;
     }
 
     // Toast for when the match is won by player two[2]
@@ -185,6 +228,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(this,"Player 2 wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
         resetBoardGameEnd();
+        roundCountPlayerTwo++;
     }
 
     // Toast for when the match is a draw
@@ -194,7 +238,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
     }
 
     /*
-        Update the text views with the current score for each player
+        - Update the text views with the current score for each player
      */
     private void updatePointsText(){
         textViewPlayerOne.setText("Player 1\n" + playerOnePoints);
@@ -202,31 +246,33 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
     }
 
     /*
-    Reset the game board, return tags and colour to initial values
+        - Reset the game board, return tags and colour to initial values
         - the round counter and player turn are also reset
      */
     private void resetBoardGameEnd(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 imageButtons[i][j].setTag("");
-                imageButtons[i][j].setBackgroundColor(Color.parseColor("#C0C0C0"));
+                imageButtons[i][j].setBackgroundResource(R.drawable.fort);
             }
         }
-        roundCount = 0;
+        moveCount = 0;
         playerOneTurn = true;
     }
 
     /*
-    Reset the entire app, by returning all variables at the initial value
+        - Reset the entire app, by returning all variables at the initial value
      */
     private void resetGameButtonPress(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 imageButtons[i][j].setTag("");
-                imageButtons[i][j].setBackgroundColor(Color.parseColor("#C0C0C0"));
+                imageButtons[i][j].setBackgroundResource(R.drawable.fort);
             }
         }
-        roundCount = 0;
+        moveCount = 0;
+        roundCountPlayerOne = 0;
+        roundCountPlayerTwo = 0;
         playerOneTurn = true;
         playerOnePoints = 0;
         playerTwoPoints = 0;
@@ -234,26 +280,26 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
     }
 
     /*
-    save the values of the given instance[Ex. in case of screen rotating the values are not lost]
+        - save the values of the given instance[Ex. in case of screen rotating the values are not lost]
         - works with onRestoreInstanceState
      */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("roundCount", roundCount);
+        outState.putInt("moveCount", moveCount);
         outState.putInt("playerOnePoints",playerOnePoints);
         outState.putInt("playerTwoPoints",playerTwoPoints);
         outState.putBoolean("playerOneTurn",playerOneTurn);
     }
 
     /*
-    transfer the saved values in the new instance[Ex. in case of screen rotating the values are not lost]
+        - transfer the saved values in the new instance[Ex. in case of screen rotating the values are not lost]
         - works with onSaveInstanceState
      */
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        roundCount = savedInstanceState.getInt("roundCount");
+        moveCount = savedInstanceState.getInt("moveCount");
         playerOnePoints = savedInstanceState.getInt("playerOnePoints");
         playerTwoPoints = savedInstanceState.getInt("playerTwoPoints");
         playerOneTurn = savedInstanceState.getBoolean("playerOneTurn");

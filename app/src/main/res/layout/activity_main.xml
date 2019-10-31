@@ -12,6 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/textViewTitle"
         android:text="Tic Tac Toe"
         android:textColor="@color/colorWhite"
         android:textSize="50sp"
@@ -22,16 +23,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/buttonPlayGame"
         android:text="Play"
         android:textSize="40sp"
-        android:layout_centerInParent="true"
-        android:id="@+id/buttonPlayGame"/>
+        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textViewTitle"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonPlay2Out3"
-        android:text="2 out of 3"
+        android:id="@+id/buttonPlayBest3"
+        android:tag="3"
+        android:text="Best of 3"
         android:textSize="30sp"
         android:layout_below="@id/buttonPlayGame"
         android:layout_centerHorizontal="true"
@@ -40,19 +44,34 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonPlay3Out5"
-        android:text="3 out of 5"
+        android:id="@+id/buttonPlayBest5"
+        android:tag="5"
+        android:text="Best of 5"
         android:textSize="30sp"
-        android:layout_below="@id/buttonPlay2Out3"
+        android:layout_below="@id/buttonPlayBest3"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonSettings"
-        android:text="Settings"
+        android:id="@+id/buttonJustPlay"
+        android:tag="0"
+        android:text="JustPlay"
         android:textSize="30sp"
+        android:layout_below="@id/buttonPlayBest5"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/imageButtonSettings"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="3dp"
+        android:background="@color/transparent"
+        android:src="@drawable/settings_512px_white"/>
 </RelativeLayout>
