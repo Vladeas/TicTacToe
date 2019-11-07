@@ -3,6 +3,7 @@ package com.example.tictactoe_v4;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,6 +38,11 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_board_game);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
+        //View decorView = getWindow().getDecorView();
+// Hide the status bar.
+        //int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        //decorView.setSystemUiVisibility(uiOptions);
 
 
         textViewPlayerOne = findViewById(R.id.textViewPlayerOne);
