@@ -83,7 +83,7 @@
                 android:layout_margin="5dp"
                 android:freezesText="true"
                 android:adjustViewBounds="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
 
             <ImageButton
                 android:id="@+id/imageButton01"
@@ -94,7 +94,7 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
 
             <ImageButton
                 android:id="@+id/imageButton02"
@@ -105,7 +105,7 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
         </LinearLayout>
 
         <LinearLayout
@@ -123,7 +123,7 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
 
             <ImageButton
                 android:id="@+id/imageButton11"
@@ -134,7 +134,7 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
 
             <ImageButton
                 android:id="@+id/imageButton12"
@@ -145,7 +145,7 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
         </LinearLayout>
 
         <LinearLayout
@@ -163,7 +163,7 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
 
             <ImageButton
                 android:id="@+id/imageButton21"
@@ -174,7 +174,7 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
 
             <ImageButton
                 android:id="@+id/imageButton22"
@@ -185,17 +185,17 @@
                 android:scaleType="centerInside"
                 android:layout_margin="5dp"
                 android:freezesText="true"
-                android:background="@drawable/fort"/>
+                android:background="@drawable/fort_512px_white"/>
         </LinearLayout>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Main Menu"
-            android:textSize="30sp"
             android:background="@color/colorBlack"
+            android:id="@+id/buttonMainMenu"
+            android:text="Main Menu"
             android:textColor="@color/colorOrange"
-            android:onClick="goToMainMenu"/>
+            android:textSize="30sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -204,13 +204,13 @@
         android:id="@+id/linearLayoutEndGamePopUp"
         android:visibility="invisible"
         android:layout_centerInParent="true"
-        android:background="@color/colorBlack">
+        android:background="@color/translucid">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
-            android:src="@drawable/gladius"/>
+            android:src="@drawable/gladius_512px_white"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -226,7 +226,6 @@
             android:layout_below="@+id/textViewEndGame"
             android:layout_centerHorizontal="true"
             android:id="@+id/buttonPlayAgainEnd"
-            android:onClick="playAgainMatch"
             android:text="Play again"
             android:textSize="30sp"/>
 
@@ -236,7 +235,6 @@
             android:layout_below="@+id/buttonPlayAgainEnd"
             android:layout_centerHorizontal="true"
             android:id="@+id/buttonGoMainMenuEnd"
-            android:onClick="goToMainMenu"
             android:text="Main Menu"
             android:textSize="30sp"/>
 

@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
+
 public class BoardGameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int boardLength = 3;
@@ -25,6 +27,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
     private TextView textViewPlayerOne;
     private TextView textViewPlayerTwo;
     private ImageButton[][] imageButtons =new ImageButton[boardLength][boardLength];
+    boolean popUpVisible = false;
 
     /*
         - initialize the Used Views (by Id)
@@ -40,7 +43,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
 
 
         //View decorView = getWindow().getDecorView();
-// Hide the status bar.
+        // Hide the status bar.
         //int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         //decorView.setSystemUiVisibility(uiOptions);
 
@@ -57,21 +60,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
             }
         }
 
-        Button buttonResetGame = findViewById(R.id.buttonResetGame);
-        buttonResetGame.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                resetGameButtonPress();
-            }
-        });
-
-        Button buttonResetBoard = findViewById(R.id.buttonResetBoard);
-        buttonResetBoard.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                resetBoardGameEnd();
-            }
-        });
+        buttonsConfiguration();
     }
 
 
@@ -82,35 +71,57 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         - call the check for win method
      */
     public void onClick(View v) {
-        if(!((ImageButton) v).getTag().toString().equals("")){
-            return;
-        }
-        if(playerOneTurn){
-            ((ImageButton) v).setBackgroundResource(R.drawable.roman_helmet_512px_white);
-            ((ImageButton) v).setTag("x");
-        } else{
-            ((ImageButton) v).setBackgroundResource(R.drawable.viking_helmet_512px_white);
-            ((ImageButton) v).setTag("o");
-        }
+        if(!popUpVisible) {
+            if (!((ImageButton) v).getTag().toString().equals("")) {
+                return;
+            }
+            if (playerOneTurn) {
+                ((ImageButton) v).setBackgroundResource(R.drawable.roman_helmet_512px_white);
+                ((ImageButton) v).setTag("x");
+            } else {
+                ((ImageButton) v).setBackgroundResource(R.drawable.viking_helmet_512px_grey);
+                ((ImageButton) v).setTag("o");
+            }
 
-        moveCount++;
+            moveCount++;
 
-        if(checkForWin()){
-            if(playerOneTurn){
+            winConditionsConfiguration();
+        }
+    }
+
+
+    /*
+        - check all win conditions and call the appropriate functions
+     */
+    private void winConditionsConfiguration(){
+        if (checkForWin()) {
+            if (playerOneTurn) {
                 playerOneWins();
+                if(!gameEnd()) {
+                    resetBoardGame();
+                }
             } else {
                 playerTwoWins();
+                if(!gameEnd()) {
+                    resetBoardGame();
+                }
             }
-        }else if (moveCount == 9){
+        } else if (moveCount == 9) {
             draw();
-        }else{
+        } else {
             playerOneTurn = !playerOneTurn;
         }
         gameEnd();
     }
 
 
-    private void gameEnd(){
+    /*
+        - for "Best of ..." games, when the limit is reached a pop up screen will appear
+        - turn the pop up layout to visible
+        - update the message for the winning player (use Math.ceil() for approximation)
+        - get the type of match from the previous activity with getIntent().getExtras();
+     */
+    private boolean gameEnd(){
         Double gameLength;
         Bundle extras = getIntent().getExtras();
         RelativeLayout linearLayoutEndGamePopUp = (RelativeLayout)findViewById(R.id.linearLayoutEndGamePopUp);
@@ -119,38 +130,31 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
             //The key argument here must match that used in the other activity
             if(gameLength != 0) {
                 if (roundCountPlayerOne >= Math.ceil(gameLength / 2.0)) {
+                    popUpVisible = true;
                     linearLayoutEndGamePopUp.setVisibility(View.VISIBLE);
-                    playerOneEndGameWin(1);
+                    playerEndGameWin(1);
+                    return true;
                 } else if (roundCountPlayerTwo >= Math.ceil(gameLength / 2.0)) {
+                    popUpVisible = true;
                     linearLayoutEndGamePopUp.setVisibility(View.VISIBLE);
-                    playerOneEndGameWin(2);
+                    playerEndGameWin(2);
+                    return true;
                 }
             }
         }
+        return false;
 
     }
 
-    private void playerOneEndGameWin(int player){
+
+    /*
+        - update the end game pop up screen for the winning player
+     */
+    private void playerEndGameWin(int player){
         TextView textViewEndGame = (TextView) findViewById(R.id.textViewEndGame);
         textViewEndGame.setText("Player " + player + " won!");
     }
 
-    /*
-        - call the reset game function
-        - It also makes the end game layout invisible
-     */
-    public void playAgainMatch(View view){
-        resetGameButtonPress();
-        RelativeLayout linearLayoutEndGamePopUp = (RelativeLayout)findViewById(R.id.linearLayoutEndGamePopUp);
-        linearLayoutEndGamePopUp.setVisibility(View.INVISIBLE);
-    }
-
-    /*
-        - end the instance of this activity
-     */
-    public void goToMainMenu(View view){
-        finish();
-    }
 
     /*
         - transfer the image View matrix data to a new String matrix
@@ -171,6 +175,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         return false;
     }
 
+
     /*
         Victory conditions on every line for a 3 by 3 matrix
             - given the matrix as a string
@@ -185,6 +190,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         }
         return false;
     }
+
 
     /*
         Victory conditions on every column for a 3 by 3 matrix
@@ -201,6 +207,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         return false;
     }
 
+
     /*
         Victory conditions on the primary diagonal for a 3 by 3 matrix
             - given the matrix as a string
@@ -213,6 +220,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         }
         return false;
     }
+
 
     /*
         Victory conditions on the secondary diagonal for a 3 by 3 matrix
@@ -227,29 +235,33 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         return false;
     }
 
+
     // Toast for when the match is won by player two[1]
     private void playerOneWins(){
         playerOnePoints++;
         Toast.makeText(this,"Player 1 wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
-        resetBoardGameEnd();
+        //resetBoardGameEnd();
         roundCountPlayerOne++;
     }
+
 
     // Toast for when the match is won by player two[2]
     private void playerTwoWins(){
         playerTwoPoints++;
         Toast.makeText(this,"Player 2 wins!",Toast.LENGTH_SHORT).show();
         updatePointsText();
-        resetBoardGameEnd();
+        //resetBoardGameEnd();
         roundCountPlayerTwo++;
     }
+
 
     // Toast for when the match is a draw
     private void draw(){
         Toast.makeText(this,"Draw!",Toast.LENGTH_SHORT).show();
-        resetBoardGameEnd();
+        resetBoardGame();
     }
+
 
     /*
         - Update the text views with the current score for each player
@@ -259,20 +271,112 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         textViewPlayerTwo.setText("Player 2\n" + playerTwoPoints);
     }
 
+
+    /*
+        - add an onClickListener for all the available buttons on this activity
+        - call the check pop up method for each button with its specific id
+     */
+    private void buttonsConfiguration(){
+        Button buttonMainMenu = findViewById(R.id.buttonMainMenu);
+        buttonMainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkForPopUp("buttonMainMenu");
+            }
+        });
+
+        Button buttonGoMainMenuEnd = findViewById(R.id.buttonGoMainMenuEnd);
+        buttonGoMainMenuEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToMainMenu();
+            }
+        });
+
+        Button buttonResetGame = findViewById(R.id.buttonResetGame);
+        buttonResetGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkForPopUp("buttonResetGame");
+            }
+        });
+
+        Button buttonResetBoard = findViewById(R.id.buttonResetBoard);
+        buttonResetBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkForPopUp("buttonResetBoard");
+            }
+        });
+
+        Button buttonPlayAgainEnd = findViewById(R.id.buttonPlayAgainEnd);
+        buttonPlayAgainEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playAgainMatch();
+            }
+        });
+    }
+
+
+    /*
+        - check if the end game pop up is VISIBLE on the screen,
+        if it is block all the other buttons, except the pop up ones
+        - use switch case for simplicity
+     */
+    private void checkForPopUp(String command){
+        if(!popUpVisible){
+            switch (command){
+                case "buttonResetGame":
+                    resetGameButtonPress();
+                    break;
+                case "buttonResetBoard":
+                    resetBoardGame();
+                    break;
+                case "buttonMainMenu":
+                    goToMainMenu();
+                    break;
+            }
+        }
+    }
+
+
+    /*
+        - call the reset game function
+        - It also makes the end game layout invisible
+     */
+    private void playAgainMatch(){
+        resetGameButtonPress();
+        RelativeLayout linearLayoutEndGamePopUp = (RelativeLayout)findViewById(R.id.linearLayoutEndGamePopUp);
+        linearLayoutEndGamePopUp.setVisibility(View.INVISIBLE);
+    }
+
+
+    /*
+        - end the instance of this activity
+     */
+    private void goToMainMenu(){
+        finish();
+    }
+
+
     /*
         - Reset the game board, return tags and colour to initial values
         - the round counter and player turn are also reset
      */
-    private void resetBoardGameEnd(){
-        for(int i = 0; i < 3; i++){
-            for(int j = 0; j < 3; j++){
-                imageButtons[i][j].setTag("");
-                imageButtons[i][j].setBackgroundResource(R.drawable.fort);
+    private void resetBoardGame(){
+        if(!popUpVisible) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    imageButtons[i][j].setTag("");
+                    imageButtons[i][j].setBackgroundResource(R.drawable.fort_512px_white);
+                }
             }
+            moveCount = 0;
+            playerOneTurn = true;
         }
-        moveCount = 0;
-        playerOneTurn = true;
     }
+
 
     /*
         - Reset the entire app, by returning all variables at the initial value
@@ -281,9 +385,10 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 imageButtons[i][j].setTag("");
-                imageButtons[i][j].setBackgroundResource(R.drawable.fort);
+                imageButtons[i][j].setBackgroundResource(R.drawable.fort_512px_white);
             }
         }
+        popUpVisible = false;
         moveCount = 0;
         roundCountPlayerOne = 0;
         roundCountPlayerTwo = 0;
@@ -292,6 +397,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         playerTwoPoints = 0;
         updatePointsText();
     }
+
 
     /*
         - save the values of the given instance[Ex. in case of screen rotating the values are not lost]
@@ -306,6 +412,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         outState.putBoolean("playerOneTurn",playerOneTurn);
     }
 
+
     /*
         - transfer the saved values in the new instance[Ex. in case of screen rotating the values are not lost]
         - works with onSaveInstanceState
@@ -318,6 +425,7 @@ public class BoardGameActivity extends AppCompatActivity implements View.OnClick
         playerTwoPoints = savedInstanceState.getInt("playerTwoPoints");
         playerOneTurn = savedInstanceState.getBoolean("playerOneTurn");
     }
+
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
